@@ -21,33 +21,33 @@ A production-quality REST API backend for a Finance Dashboard system, built with
 
 ## Project Structure
 
-\\\
+```
 src/
-+-- app.ts # Express app setup (CORS, rate limiting, routes)
-+-- server.ts # Server entry point
-+-- routes/
-�   +-- auth.routes.ts # POST /api/auth/register, /login
-�   +-- user.routes.ts # GET/PUT/DELETE /api/users (ADMIN only)
-�   +-- record.routes.ts # CRUD /api/records
-�   +-- analytics.routes.ts # GET /api/analytics/summary
-+-- controllers/ # Request/response handling
-+-- services/ # Business logic (auth, users, records, analytics)
-+-- middlewares/
-�   +-- auth.middleware.ts # JWT verification + role authorization
-�   +-- validate.middleware.ts # Zod schema validation
-�   +-- error.middleware.ts # Global error handling
-+-- utils/
-    +-- db.ts # Prisma client instance
-    +-- jwt.ts # JWT sign/verify helpers
-    +-- errors.ts # AppError class
+├── app.ts                 # Express app setup (CORS, rate limiting, routes)
+├── server.ts              # Server entry point
+├── routes/
+│   ├── auth.routes.ts     # POST /api/auth/register, /login
+│   ├── user.routes.ts     # GET/PUT/DELETE /api/users (ADMIN only)
+│   ├── record.routes.ts   # CRUD /api/records
+│   └── analytics.routes.ts # GET /api/analytics/summary
+├── controllers/           # Request/response handling
+├── services/              # Business logic (auth, users, records, analytics)
+├── middlewares/
+│   ├── auth.middleware.ts       # JWT verification + role authorization
+│   ├── validate.middleware.ts   # Zod schema validation
+│   └── error.middleware.ts      # Global error handling
+└── utils/
+    ├── db.ts              # Prisma client instance
+    ├── jwt.ts             # JWT sign/verify helpers
+    └── errors.ts          # AppError class
 
 prisma/
-+-- schema.prisma # Database schema (User, FinancialRecord)
-+-- migrations/ # Auto-generated SQLite migrations
+├── schema.prisma          # Database schema (User, FinancialRecord)
+└── migrations/            # Auto-generated SQLite migrations
 
 tests/
-+-- api.test.ts # Integration tests (Jest + Supertest)
-\\\
+└── api.test.ts            # Integration tests (Jest + Supertest)
+```
 
 ---
 
@@ -93,7 +93,8 @@ Server starts at: **http://localhost:3000**
 }
 \\\
 
-> \ole\ is optional. Defaults to \VIEWER\. Accepted values: \VIEWER\, \ANALYST\, \ADMIN\
+> \
+ole\ is optional. Defaults to \VIEWER\. Accepted values: \VIEWER\, \ANALYST\, \ADMIN\
 
 **Login body:**
 \\\json
@@ -224,7 +225,8 @@ Tests cover:
 ## Assumptions
 
 1. **Global Records**: Financial records are shared across all users (company-wide dashboard), not scoped per user. An Admin creates records; all roles can view them.
-2. **Role Assignment on Register**: For simplicity, the \ole\ field is accepted at registration time. In production, only Admins should be able to assign roles.
+2. **Role Assignment on Register**: For simplicity, the \
+ole\ field is accepted at registration time. In production, only Admins should be able to assign roles.
 3. **SQLite for Persistence**: Chosen for zero-config local setup. Easily swappable to PostgreSQL/MySQL by changing \prisma/schema.prisma\ datasource.
 4. **Soft Delete not implemented**: Hard deletes are used. Soft delete can be added with a \deletedAt\ nullable DateTime field.
 
