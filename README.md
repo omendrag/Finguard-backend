@@ -226,7 +226,7 @@ Tests cover:
 1. **Global Records**: Financial records are shared across all users (company-wide dashboard), not scoped per user. An Admin creates records; all roles can view them.
 2. **Role Assignment on Register**: For simplicity, the `role` field is accepted at registration time. In production, only Admins should be able to assign roles.
 3. **SQLite for Persistence**: Chosen for zero-config local setup. Easily swappable to PostgreSQL/MySQL by changing `prisma/schema.prisma` datasource.
-4. **Soft Delete not implemented**: Hard deletes are used. Soft delete can be added with a `deletedAt` nullable DateTime field.
+4. **Soft Delete not implemented**: Hard deletes are used. Soft delete can be added with a `deletedAt` nullable DateTime fields.
 
 ---
 
