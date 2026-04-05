@@ -59,7 +59,7 @@ tests/
 
 ### Installation
 
-\\\ash
+```bash
 # 1. Install dependencies
 npm install
 
@@ -68,7 +68,7 @@ npx prisma migrate dev --name init
 
 # 3. Start the development server
 npm run dev
-\\\
+```
 
 Server starts at: **http://localhost:3000**
 
@@ -80,32 +80,31 @@ Server starts at: **http://localhost:3000**
 
 | Method | Endpoint | Description |
 |---|---|---|
-| POST | \/api/auth/register\ | Register a new user |
-| POST | \/api/auth/login\ | Login and receive JWT token |
+| POST | `/api/auth/register` | Register a new user |
+| POST | `/api/auth/login` | Login and receive JWT token |
 
 **Register body:**
-\\\json
+```json
 {
   "name": "John Admin",
   "email": "admin@company.com",
   "password": "password123",
   "role": "ADMIN"
 }
-\\\
+```
 
-> \
-ole\ is optional. Defaults to \VIEWER\. Accepted values: \VIEWER\, \ANALYST\, \ADMIN\
+> `role` is optional. Defaults to `VIEWER`. Accepted values: `VIEWER`, `ANALYST`, `ADMIN`
 
 **Login body:**
-\\\json
+```json
 {
   "email": "admin@company.com",
   "password": "password123"
 }
-\\\
+```
 
 **Login Response:**
-\\\json
+```json
 {
   "status": "success",
   "data": {
@@ -117,9 +116,9 @@ ole\ is optional. Defaults to \VIEWER\. Accepted values: \VIEWER\, \ANALYST\, \A
     "token": "eyJhbGci..."
   }
 }
-\\\
+```
 
-> **All subsequent API calls require \Authorization: Bearer <token>\ header.**
+> **All subsequent API calls require `Authorization: Bearer <token>` header.**
 
 ---
 
@@ -127,13 +126,13 @@ ole\ is optional. Defaults to \VIEWER\. Accepted values: \VIEWER\, \ANALYST\, \A
 
 | Method | Endpoint | Roles | Description |
 |---|---|---|---|
-| GET | \/api/records\ | ALL | List records (paginated, filterable) |
-| POST | \/api/records\ | ADMIN | Create a record |
-| PUT | \/api/records/:id\ | ADMIN | Update a record |
-| DELETE | \/api/records/:id\ | ADMIN | Delete a record |
+| GET | `/api/records` | ALL | List records (paginated, filterable) |
+| POST | `/api/records` | ADMIN | Create a record |
+| PUT | `/api/records/:id` | ADMIN | Update a record |
+| DELETE | `/api/records/:id` | ADMIN | Delete a record |
 
 **Create Record body:**
-\\\json
+```json
 {
   "amount": 5000.00,
   "type": "INCOME",
@@ -141,12 +140,12 @@ ole\ is optional. Defaults to \VIEWER\. Accepted values: \VIEWER\, \ANALYST\, \A
   "date": "2024-01-15",
   "notes": "January salary"
 }
-\\\
+```
 
 **GET /api/records query params:**
-\\\
+```
 ?type=INCOME&category=Salary&startDate=2024-01-01&endDate=2024-12-31&page=1&limit=10
-\\\
+```
 
 ---
 
@@ -154,10 +153,10 @@ ole\ is optional. Defaults to \VIEWER\. Accepted values: \VIEWER\, \ANALYST\, \A
 
 | Method | Endpoint | Roles | Description |
 |---|---|---|---|
-| GET | \/api/analytics/summary\ | ANALYST, ADMIN | Dashboard summary |
+| GET | `/api/analytics/summary` | ANALYST, ADMIN | Dashboard summary |
 
 **Response:**
-\\\json
+```json
 {
   "status": "success",
   "data": {
@@ -172,7 +171,7 @@ ole\ is optional. Defaults to \VIEWER\. Accepted values: \VIEWER\, \ANALYST\, \A
     "recentActivity": [...]
   }
 }
-\\\
+```
 
 ---
 
@@ -180,17 +179,17 @@ ole\ is optional. Defaults to \VIEWER\. Accepted values: \VIEWER\, \ANALYST\, \A
 
 | Method | Endpoint | Description |
 |---|---|---|
-| GET | \/api/users\ | List all users |
-| PUT | \/api/users/:id\ | Update role or status |
-| DELETE | \/api/users/:id\ | Delete a user |
+| GET | `/api/users` | List all users |
+| PUT | `/api/users/:id` | Update role or status |
+| DELETE | `/api/users/:id` | Delete a user |
 
 **Update User body:**
-\\\json
+```json
 {
   "role": "ANALYST",
   "status": "INACTIVE"
 }
-\\\
+```
 
 ---
 
@@ -198,37 +197,36 @@ ole\ is optional. Defaults to \VIEWER\. Accepted values: \VIEWER\, \ANALYST\, \A
 
 | Action | VIEWER | ANALYST | ADMIN |
 |---|:---:|:---:|:---:|
-| View financial records | ? | ? | ? |
-| Create / Update / Delete records | ? | ? | ? |
-| View analytics summary | ? | ? | ? |
-| Manage users | ? | ? | ? |
+| View financial records | ✅ | ✅ | ✅ |
+| Create / Update / Delete records | ❌ | ❌ | ✅ |
+| View analytics summary | ❌ | ✅ | ✅ |
+| Manage users | ❌ | ❌ | ✅ |
 
 ---
 
 ## Running Tests
 
-\\\ash
+```bash
 npm test
-\\\
+```
 
-**Test results: 5/5 tests pass ?**
+**Test results: 5/5 tests pass ✅**
 
 Tests cover:
-- ? VIEWER blocked from creating records (403 Forbidden)
-- ? ADMIN can create records (201 Created)
-- ? Zod validation rejects bad input (400 Bad Request)
-- ? ADMIN can access analytics summary (200 OK)
-- ? VIEWER blocked from analytics (403 Forbidden)
+- ✅ VIEWER blocked from creating records (403 Forbidden)
+- ✅ ADMIN can create records (201 Created)
+- ✅ Zod validation rejects bad input (400 Bad Request)
+- ✅ ADMIN can access analytics summary (200 OK)
+- ✅ VIEWER blocked from analytics (403 Forbidden)
 
 ---
 
 ## Assumptions
 
 1. **Global Records**: Financial records are shared across all users (company-wide dashboard), not scoped per user. An Admin creates records; all roles can view them.
-2. **Role Assignment on Register**: For simplicity, the \
-ole\ field is accepted at registration time. In production, only Admins should be able to assign roles.
-3. **SQLite for Persistence**: Chosen for zero-config local setup. Easily swappable to PostgreSQL/MySQL by changing \prisma/schema.prisma\ datasource.
-4. **Soft Delete not implemented**: Hard deletes are used. Soft delete can be added with a \deletedAt\ nullable DateTime field.
+2. **Role Assignment on Register**: For simplicity, the `role` field is accepted at registration time. In production, only Admins should be able to assign roles.
+3. **SQLite for Persistence**: Chosen for zero-config local setup. Easily swappable to PostgreSQL/MySQL by changing `prisma/schema.prisma` datasource.
+4. **Soft Delete not implemented**: Hard deletes are used. Soft delete can be added with a `deletedAt` nullable DateTime field.
 
 ---
 
